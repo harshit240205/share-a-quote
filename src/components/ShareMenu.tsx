@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Quote, shareOnTwitter, shareOnFacebook, copyToClipboard } from '@/utils/quoteService';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { toast } from '@/hooks/use-toast'; // Fixed: importing toast from the correct location
+import { useToast } from '@/hooks/use-toast'; // Fixed: using useToast hook properly
 import { Share, Twitter, Facebook, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -13,15 +13,23 @@ interface ShareMenuProps {
 
 const ShareMenu: React.FC<ShareMenuProps> = ({ quote }) => {
   const [copying, setCopying] = useState(false);
+  const { toast } = useToast(); // Get toast from the hook
 
   const handleCopy = async () => {
     setCopying(true);
     const success = await copyToClipboard(quote);
     
     if (success) {
-      toast.success('Quote copied to clipboard');
+      toast({
+        title: "Success",
+        description: "Quote copied to clipboard"
+      });
     } else {
-      toast.error('Failed to copy quote');
+      toast({
+        title: "Error",
+        description: "Failed to copy quote",
+        variant: "destructive"
+      });
     }
     
     setTimeout(() => setCopying(false), 1500);

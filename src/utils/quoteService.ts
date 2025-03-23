@@ -86,7 +86,58 @@ const quotes = [
 export interface Quote {
   text: string;
   author: string;
+  isAiGenerated?: boolean;
 }
+
+// Function to generate quotes using AI
+const generateAiQuote = async (topic?: string): Promise<Quote> => {
+  try {
+    // In a real application, this would call an external AI API
+    // For now, we'll simulate AI generation with a delayed response
+    
+    const aiQuotes = [
+      {
+        text: "The key to artificial intelligence has always been the representation.",
+        author: "AI Assistant"
+      },
+      {
+        text: "In the midst of chaos, there is also opportunity for artificial growth.",
+        author: "AI Wisdom"
+      },
+      {
+        text: "Digital transformation is not just about technology, but about reimagining how you bring together people, data, and processes.",
+        author: "AI Insights"
+      },
+      {
+        text: "The best way to predict the future is to create it with conscious algorithms.",
+        author: "AI Futurist"
+      },
+      {
+        text: "Learning is the only thing the mind never exhausts, never fears, and never regrets.",
+        author: "AI Leonardo"
+      }
+    ];
+    
+    // Simulate AI generation delay
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * aiQuotes.length);
+        resolve({
+          ...aiQuotes[randomIndex],
+          isAiGenerated: true
+        });
+      }, 1000);
+    });
+  } catch (error) {
+    console.error("Error generating AI quote:", error);
+    // Fallback to a random quote if AI generation fails
+    return { 
+      text: "Innovation distinguishes between a leader and a follower.", 
+      author: "AI Generator (Fallback)",
+      isAiGenerated: true
+    };
+  }
+};
 
 // Get a random quote from the collection
 export const getRandomQuote = (): Quote => {
@@ -99,8 +150,14 @@ let quoteHistory: Quote[] = [];
 let currentIndex = -1;
 
 // Get the next quote and add it to history
-export const getNextQuote = (): Quote => {
-  const newQuote = getRandomQuote();
+export const getNextQuote = async (useAi: boolean = false): Promise<Quote> => {
+  let newQuote: Quote;
+  
+  if (useAi) {
+    newQuote = await generateAiQuote();
+  } else {
+    newQuote = getRandomQuote();
+  }
   
   // If we're not at the end of the history, trim it
   if (currentIndex < quoteHistory.length - 1) {
@@ -152,3 +209,6 @@ export const copyToClipboard = async (quote: Quote): Promise<boolean> => {
     return false;
   }
 };
+
+// Export the AI generation function
+export const generateAIQuote = generateAiQuote;
