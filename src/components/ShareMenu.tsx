@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Quote, shareOnTwitter, shareOnFacebook, copyToClipboard } from '@/utils/quoteService';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast'; // Fixed: importing toast from the correct location
 import { Share, Twitter, Facebook, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 

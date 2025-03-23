@@ -183,7 +183,7 @@
 }
 
 .quote-card:before {
-  content: """;
+  content: "\201C"; /* Fixed: Using Unicode character for opening double quote */
   position: absolute;
   top: -60px;
   left: -30px;
